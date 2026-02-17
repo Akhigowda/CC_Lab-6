@@ -1,7 +1,12 @@
 pipeline {
     agent any
 
+    parameters {
+        string(name: 'PORT', defaultValue: '8082', description: 'Port for NGINX Load Balancer')
+    }
+
     stages {
+
         stage('Build Backend Image') {
             steps {
                 sh '''
@@ -29,22 +34,23 @@ pipeline {
                 sh '''
                 echo "Starting NGINX Load Balancer..."
                 docker rm -f nginx-lb || true
+
+                WORKSPACE_DIR=$(pwd)
+
                 docker run -d -p ${PORT}:80 \
                   --name nginx-lb \
                   --link backend1 \
                   --link backend2 \
-                  -v $(pwd)/nginx/nginx.conf:/etc/nginx/nginx.conf:ro \
+                  -v $WORKSPACE_DIR/nginx/nginx.conf:/etc/nginx/nginx.conf:ro \
                   nginx
                 '''
-                }
             }
-
         }
     }
 
     post {
         success {
-            echo "Pipeline executed successfully! Load balancer running on http://localhost:8082"
+            echo "Pipeline executed successfully! Load balancer running on http://localhost:${PORT}"
         }
         failure {
             echo "Pipeline failed. Check console logs for errors."

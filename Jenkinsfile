@@ -41,11 +41,11 @@ pipeline {
                   --name nginx-lb \
                   --link backend1 \
                   --link backend2 \
-                  -v $WORKSPACE_DIR/nginx/nginx.conf:/etc/nginx/default.conf:ro \
+                  -v $WORKSPACE_DIR/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro \
                   nginx
                 '''
             }
-        }https://github.com/Akhigowda/CC_Lab-6/edit/main/Jenkinsfile#L44C65-L44C68
+        }
     }
 
     post {

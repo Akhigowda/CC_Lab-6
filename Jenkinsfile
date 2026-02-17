@@ -41,7 +41,7 @@ pipeline {
                   --name nginx-lb \
                   --link backend1 \
                   --link backend2 \
-                  -v $WORKSPACE_DIR/nginx/nginx.conf:/etc/nginx/nginx.conf:ro \
+                  -v $WORKSPACE_DIR/nginx/nginx.conf:/etc/nginx/defult.conf:ro \
                   nginx
                 '''
             }
